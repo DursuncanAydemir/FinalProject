@@ -8,6 +8,8 @@ using Castle.DynamicProxy;
 using Core.Utilities.Interceptors;
 using Autofac.Extras.DynamicProxy;
 using Business.CSS;
+using Core.Utilities.Security.JWT;
+using Microsoft.AspNetCore.Http;
 
 public class AutofacBusinessModule : Module
 {
@@ -18,6 +20,14 @@ public class AutofacBusinessModule : Module
 
         builder.RegisterType<CategoryManager>().As<ICategoryService>().SingleInstance();
         builder.RegisterType<EfCategoryDal>().As<ICategoryDal>().SingleInstance();
+
+        builder.RegisterType<UserManager>().As<IUserService>();
+        builder.RegisterType<EfUserDal>().As<IUserDal>();
+
+        builder.RegisterType<AuthManager>().As<IAuthService>();
+        builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+
+        //builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
 
         builder.RegisterAssemblyTypes(ThisAssembly).AsImplementedInterfaces()
                 .EnableInterfaceInterceptors(new ProxyGenerationOptions()
